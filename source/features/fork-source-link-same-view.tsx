@@ -15,7 +15,7 @@ async function getEquivalentURL(): Promise<string> {
 	const forkedRepository = getRepo(getForkedRepo())!;
 	const defaultUrl = '/' + forkedRepository.nameWithOwner;
 
-	if (pageDetect.isConversation() || pageDetect.isRepoRoot()) {
+	if (pageDetect.isIssue() || pageDetect.isPR() || pageDetect.isRepoRoot()) {
 		// We must reset the link because the header is outside the ajaxed area
 		return defaultUrl;
 	}
@@ -37,7 +37,7 @@ async function getEquivalentURL(): Promise<string> {
 
 async function init(): Promise<void> {
 	// The link must always be updated/reset. This pattern ensures that the link is always updated and never fails through some conditions.
-	select<HTMLAnchorElement>(`[data-hovercard-url="/${getForkedRepo()!}/hovercard"]`)!.href = await getEquivalentURL();
+	select(`a[data-hovercard-url="/${getForkedRepo()!}/hovercard"]`)!.href = await getEquivalentURL();
 }
 
 void features.add(import.meta.url, {
